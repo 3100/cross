@@ -277,6 +277,11 @@ func (k Keeper) ReceiveCommitPacket(
 				return nil, err
 			}
 		} else if tx.PrepareResult == types.PREPARE_RESULT_FAILED {
+			fmt.Println("***** DEBUG *****")
+			if err := state.Discard(id); err != nil {
+				fmt.Printf("Discard Error: %v\n", err)
+				return nil, err
+			}
 			// nop
 		} else {
 			panic("unreachable")
