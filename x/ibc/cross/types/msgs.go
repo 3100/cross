@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/gogo/protobuf/proto"
 )
 
 const TypeInitiate = "cross_initiate"
@@ -96,6 +97,10 @@ func (msg MsgInitiate) GetSigners() []sdk.AccAddress {
 	}
 	return signers
 }
+
+func (m *MsgInitiate) Reset()         { *m = MsgInitiate{} }
+func (m *MsgInitiate) String() string { return proto.CompactTextString(m) }
+func (*MsgInitiate) ProtoMessage()    {}
 
 type ChannelInfo struct {
 	Port    string `json:"port" yaml:"port"`       // the port on which the packet will be sent

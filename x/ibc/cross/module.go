@@ -3,7 +3,6 @@ package cross
 import (
 	"encoding/json"
 
-	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -64,7 +63,7 @@ func (AppModuleBasic) ValidateGenesis(m codec.JSONMarshaler, bz json.RawMessage)
 }
 
 // RegisterRESTRoutes returns rest routes
-func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router) {
+func (AppModuleBasic) RegisterRESTRoutes(ctx client.Context, rtr *mux.Router) {
 	rest.RegisterRoutes(ctx, rtr)
 }
 

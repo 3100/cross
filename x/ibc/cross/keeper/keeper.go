@@ -3,8 +3,9 @@ package keeper
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/capability"
-	porttypes "github.com/cosmos/cosmos-sdk/x/ibc/05-port/types"
+	capabilitykeeper "github.com/cosmos/cosmos-sdk/x/capability/keeper"
+	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
+	host "github.com/cosmos/cosmos-sdk/x/ibc/24-host"
 	"github.com/datachainlab/cross/x/ibc/cross/keeper/common"
 	"github.com/datachainlab/cross/x/ibc/cross/keeper/simple"
 	"github.com/datachainlab/cross/x/ibc/cross/keeper/tpc"
@@ -19,7 +20,7 @@ type Keeper struct {
 	simpleKeeper simple.Keeper
 	tpcKeeper    tpc.Keeper
 	portKeeper   types.PortKeeper
-	scopedKeeper capability.ScopedKeeper
+	scopedKeeper capabilitykeeper.ScopedKeeper
 
 	common.Keeper
 }
@@ -30,7 +31,7 @@ func NewKeeper(
 	storeKey sdk.StoreKey,
 	channelKeeper types.ChannelKeeper,
 	portKeeper types.PortKeeper,
-	scopedKeeper capability.ScopedKeeper,
+	scopedKeeper capabilitykeeper.ScopedKeeper,
 	resolverProvider types.ObjectResolverProvider,
 	channelResolver types.ChannelResolver,
 ) Keeper {
@@ -56,9 +57,9 @@ func (k Keeper) SimpleKeeper() simple.Keeper {
 
 // BindPort defines a wrapper function for the ort TPCKeeper's function in
 // order to expose it to module's InitGenesis function
-func (k Keeper) BindPort(ctx sdk.Context, portID string) (*capability.Capability, error) {
+func (k Keeper) BindPort(ctx sdk.Context, portID string) (*capabilitytypes.Capability, error) {
 	cap := k.portKeeper.BindPort(ctx, portID)
-	if err := k.ClaimCapability(ctx, cap, porttypes.PortPath(portID)); err != nil {
+	if err := k.ClaimCapability(ctx, cap, host.PortPath(portID)); err != nil {
 		return nil, err
 	}
 	return cap, nil
@@ -66,6 +67,6 @@ func (k Keeper) BindPort(ctx sdk.Context, portID string) (*capability.Capability
 
 // ClaimCapability allows the transfer module that can claim a capability that IBC module
 // passes to it
-func (k Keeper) ClaimCapability(ctx sdk.Context, cap *capability.Capability, name string) error {
+func (k Keeper) ClaimCapability(ctx sdk.Context, cap *capabilitytypes.Capability, name string) error {
 	return k.scopedKeeper.ClaimCapability(ctx, cap, name)
 }

@@ -5,13 +5,13 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/cosmos/cosmos-sdk/client/context"
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/datachainlab/cross/x/ibc/cross/types"
 	"github.com/gorilla/mux"
 )
 
-func QueryCoordinatorStatusHandlerFn(ctx context.CLIContext) http.HandlerFunc {
+func QueryCoordinatorStatusHandlerFn(ctx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx, ok := rest.ParseQueryHeightOrReturnBadRequest(w, ctx, r)
 		if !ok {
@@ -37,7 +37,7 @@ func QueryCoordinatorStatusHandlerFn(ctx context.CLIContext) http.HandlerFunc {
 	}
 }
 
-func QueryUnacknowledgedPacketsHandlerFn(ctx context.CLIContext) http.HandlerFunc {
+func QueryUnacknowledgedPacketsHandlerFn(ctx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx, ok := rest.ParseQueryHeightOrReturnBadRequest(w, ctx, r)
 		if !ok {

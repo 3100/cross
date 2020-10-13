@@ -22,7 +22,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp/helpers"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	authexported "github.com/cosmos/cosmos-sdk/x/auth/exported"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 )
 
@@ -76,7 +76,7 @@ func SetupWithOptions(isCheckTx bool, contractHandlerProvider ContractHandlerPro
 
 // SetupWithGenesisAccounts initializes a new SimApp with the provided genesis
 // accounts and possible balances.
-func SetupWithGenesisAccounts(chainID string, contractHandlerProvider ContractHandlerProvider, channelResolverProvider ChannelResolverProvider, anteHandlerProvider AnteHandlerProvider, packetMiddleware types.PacketMiddleware, genAccs []authexported.GenesisAccount, balances ...bank.Balance) *SimApp {
+func SetupWithGenesisAccounts(chainID string, contractHandlerProvider ContractHandlerProvider, channelResolverProvider ChannelResolverProvider, anteHandlerProvider AnteHandlerProvider, packetMiddleware types.PacketMiddleware, genAccs []authtypes.GenesisAccount, balances ...bank.Balance) *SimApp {
 	db := dbm.NewMemDB()
 	app := NewSimApp(log.NewNopLogger(), db, nil, true, map[int64]bool{}, DefaultNodeHome, 0, contractHandlerProvider, channelResolverProvider, anteHandlerProvider, packetMiddleware)
 

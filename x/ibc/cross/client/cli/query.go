@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/datachainlab/cross/x/ibc/cross/types"
@@ -34,7 +33,7 @@ func GetCoordinatorStatus(cdc *codec.Codec) *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			inBuf := bufio.NewReader(cmd.InOrStdin())
-			cliCtx := context.NewCLIContextWithInput(inBuf).WithCodec(cdc)
+			cliCtx := client.NewContextWithInput(inBuf).WithCodec(cdc)
 			bz, err := hex.DecodeString(args[0])
 			if err != nil {
 				return err
@@ -67,7 +66,7 @@ func GetUnacknowledgedPackets(cdc *codec.Codec) *cobra.Command {
 		Short: "get all unacknowledged packets",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			inBuf := bufio.NewReader(cmd.InOrStdin())
-			cliCtx := context.NewCLIContextWithInput(inBuf).WithCodec(cdc)
+			cliCtx := client.NewContextWithInput(inBuf).WithCodec(cdc)
 
 			req := types.QueryUnacknowledgedPacketsRequest{}
 			route := fmt.Sprintf("custom/%s/%s", types.ModuleName, types.QueryUnacknowledgedPackets)

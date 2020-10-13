@@ -29,7 +29,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	authexported "github.com/cosmos/cosmos-sdk/x/auth/exported"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	"github.com/cosmos/cosmos-sdk/x/staking"
@@ -124,7 +124,7 @@ func InitTestnet(
 
 	//nolint:prealloc
 	var (
-		genAccounts []authexported.GenesisAccount
+		genAccounts []authtypes.GenesisAccount
 		genBalances []bank.Balance
 		genFiles    []string
 	)
@@ -278,7 +278,7 @@ func InitTestnet(
 
 func initGenFiles(
 	cdc *codec.Codec, mbm module.BasicManager, chainID string,
-	genAccounts []authexported.GenesisAccount, genBalances []bank.Balance,
+	genAccounts []authtypes.GenesisAccount, genBalances []bank.Balance,
 	genFiles []string, numValidators int,
 ) error {
 

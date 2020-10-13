@@ -7,10 +7,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/cosmos/cosmos-sdk/x/capability"
+	capabilitykeeper "github.com/cosmos/cosmos-sdk/x/capability/keeper"
 	channel "github.com/cosmos/cosmos-sdk/x/ibc/04-channel"
 	channelexported "github.com/cosmos/cosmos-sdk/x/ibc/04-channel/exported"
-	ibctypes "github.com/cosmos/cosmos-sdk/x/ibc/types"
+	host "github.com/cosmos/cosmos-sdk/x/ibc/24-host"
 	"github.com/datachainlab/cross/x/ibc/cross/types"
 	"github.com/tendermint/tendermint/crypto/tmhash"
 )
@@ -21,7 +21,7 @@ type Keeper struct {
 
 	channelKeeper types.ChannelKeeper
 	portKeeper    types.PortKeeper
-	scopedKeeper  capability.ScopedKeeper
+	scopedKeeper  capabilitykeeper.ScopedKeeper
 
 	resolverProvider types.ObjectResolverProvider
 	channelResolver  types.ChannelResolver
@@ -32,7 +32,7 @@ func NewKeeper(
 	storeKey sdk.StoreKey,
 	channelKeeper types.ChannelKeeper,
 	portKeeper types.PortKeeper,
-	scopedKeeper capability.ScopedKeeper,
+	scopedKeeper capabilitykeeper.ScopedKeeper,
 	resolverProvider types.ObjectResolverProvider,
 	channelResolver types.ChannelResolver,
 ) Keeper {
@@ -55,7 +55,7 @@ func (k Keeper) PortKeeper() types.PortKeeper {
 	return k.portKeeper
 }
 
-func (k Keeper) ScopedKeeper() capability.ScopedKeeper {
+func (k Keeper) ScopedKeeper() capabilitykeeper.ScopedKeeper {
 	return k.scopedKeeper
 }
 
@@ -92,7 +92,7 @@ func (k Keeper) SendPacket(
 		timeoutHeight,
 		timeoutTimestamp,
 	)
-	channelCap, ok := k.scopedKeeper.GetCapability(ctx, ibctypes.ChannelCapabilityPath(sourcePort, sourceChannel))
+	channelCap, ok := k.scopedKeeper.GetCapability(ctx, host.ChannelCapabilityPath(sourcePort, sourceChannel))
 	if !ok {
 		return sdkerrors.Wrap(channel.ErrChannelCapabilityNotFound, "module does not own channel capability")
 	}
@@ -212,7 +212,7 @@ func (k Keeper) processTransaction(
 // in order to expose it to the cross handler.
 // Keeper retreives channel capability and passes it into channel keeper for authentication
 func (k Keeper) PacketExecuted(ctx sdk.Context, packet channelexported.PacketI, acknowledgement []byte) error {
-	chanCap, ok := k.scopedKeeper.GetCapability(ctx, ibctypes.ChannelCapabilityPath(packet.GetDestPort(), packet.GetDestChannel()))
+	chanCap, ok := k.scopedKeeper.GetCapability(ctx, host.ChannelCapabilityPath(packet.GetDestPort(), packet.GetDestChannel()))
 	if !ok {
 		return sdkerrors.Wrap(channel.ErrChannelCapabilityNotFound, "channel capability could not be retrieved for packet")
 	}

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cosmos/cosmos-sdk/client/context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/datachainlab/cross/x/ibc/contract/types"
@@ -22,7 +21,7 @@ func (r *ContractCallReq) SetStateConstraintType(tp uint8) {
 	r.StateConstraintType = &tp
 }
 
-func QueryContractCallRequestHandlerFn(ctx context.CLIContext) http.HandlerFunc {
+func QueryContractCallRequestHandlerFn(ctx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req ContractCallReq
 		if !rest.ReadRESTReq(w, r, ctx.Codec, &req) {
