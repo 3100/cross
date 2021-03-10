@@ -56,6 +56,9 @@ func GetCreateContractTransaction() *cobra.Command {
 					channeltypes.NewQueryClient(clientCtx),
 					initiatorChannel,
 				)
+				if err != nil {
+					return err
+				}
 			}
 
 			var signers []accounttypes.AccountID
