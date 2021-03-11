@@ -323,7 +323,7 @@ func (am AppModule) OnAcknowledgementPacket(
 		return am.keeper.ReceivePacketAcknowledgementfunc(ctx, packet, parsedAck)
 	case *channeltypes.Acknowledgement_Error:
 		// TODO add an error case
-		panic(res.Error)
+		return nil, fmt.Errorf(res.Error)
 	default:
 		panic(fmt.Sprintf("unknown type '%T'", res))
 	}
